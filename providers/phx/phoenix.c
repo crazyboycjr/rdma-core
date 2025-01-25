@@ -6,6 +6,7 @@
 #include "phoenix.h"
 #include "phoenix-abi.h"
 #include "phoenix_verbs.h"
+#include "phoenix_syscalls.h"
 
 static const struct verbs_context_ops phoenix_context_ops = {
 	.alloc_pd = phoenix_alloc_pd,
@@ -44,13 +45,15 @@ phoenix_alloc_context(struct ibv_device *device, int cmd_fd, void *private_data)
 
 	verbs_err(context, "phoenix_alloc_context\n");
 
-	if (ibv_cmd_get_context(context, &cmd, sizeof(cmd),
-				&resp.ibv_resp, sizeof(resp)))
+	if (ibv_cmd_get_context(context, &cmd, sizeof(cmd), &resp.ibv_resp,
+				sizeof(resp)))
 		goto err_out;
 
 	verbs_err(context, "calling verbs_set_ops\n");
 
 	verbs_set_ops(context, &phoenix_context_ops);
+
+	phoenix_cmd_get_context(device->name, &context->context);
 
 	return context;
 

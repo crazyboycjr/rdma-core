@@ -1,14 +1,32 @@
 #include "phoenix_verbs.h"
+#include "phoenix_syscalls.h"
 
 struct ibv_pd *phoenix_alloc_pd(struct ibv_context *ctx)
 {
+	struct ibv_pd *pd;
+	int err;
 	verbs_err(verbs_get_ctx(ctx), "phoenix_alloc_pd\n");
+
+	pd = calloc(1, sizeof(*pd));
+	if (!pd)
+		return NULL;
+
+	err = phoenix_cmd_alloc_pd(ctx, pd);
+	if (err) {
+		verbs_err(verbs_get_ctx(ctx),
+			  "phoenix_cmd_alloc_pd failed %d\n", err);
+		free(pd);
+		return NULL;
+	}
+
+	// they should be set in the CAPI.
+	assert(pd->context && pd->handle);
 	return NULL;
 }
 int phoenix_free_pd(struct ibv_pd *pd)
 {
 	verbs_err(verbs_get_ctx(pd->context), "phoenix_free_pd\n");
-	return NULL;
+	return 0;
 }
 
 int phoenix_query_device(struct ibv_context *ctx,

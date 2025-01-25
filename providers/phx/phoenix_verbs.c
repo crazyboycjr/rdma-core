@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "phoenix_verbs.h"
 #include "phoenix_syscalls.h"
 
@@ -15,13 +17,14 @@ struct ibv_pd *phoenix_alloc_pd(struct ibv_context *ctx)
 	if (err) {
 		verbs_err(verbs_get_ctx(ctx),
 			  "phoenix_cmd_alloc_pd failed %d\n", err);
+		fprintf(stderr, "phoenix_cmd_alloc_pd failed %d\n", err);
 		free(pd);
 		return NULL;
 	}
 
 	// they should be set in the CAPI.
 	assert(pd->context && pd->handle);
-	return NULL;
+	return pd;
 }
 int phoenix_free_pd(struct ibv_pd *pd)
 {

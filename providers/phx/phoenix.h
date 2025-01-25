@@ -16,4 +16,8 @@ static inline struct phoenix_context *to_phoenix_context(struct ibv_context *bas
 	return container_of(base, struct phoenix_context, ibv_ctx.context);
 }
 
+static inline struct phoenix_device *to_phoenix_device(struct ibv_device *base) {
+	return container_of(base, struct phoenix_device, ibv_dev.device);
+}
+
 #endif /* __PHOENIX_H__ */

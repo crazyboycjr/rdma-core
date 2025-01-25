@@ -53,7 +53,8 @@ phoenix_alloc_context(struct ibv_device *device, int cmd_fd, void *private_data)
 
 	verbs_set_ops(context, &phoenix_context_ops);
 
-	phoenix_cmd_get_context(device->name, &context->context);
+	// Hardcode mlx5_0 now, should get this device name from somewhere
+	phoenix_cmd_get_context("mlx5_0", &context->context);
 
 	return context;
 

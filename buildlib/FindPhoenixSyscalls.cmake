@@ -2,7 +2,9 @@
 # Module to find the phoenix_syscalls library and headers
 
 # Allow user to specify a custom root path for phoenix_syscalls
-set(PHOENIX_SYSCALLS_RREFIX "" CACHE PATH "Directory for phoenix_syscalls installation")
+if(NOT DEFINED PHOENIX_SYSCALLS_PREFIX)
+  set(PHOENIX_SYSCALLS_PREFIX "/tmp/phoenix" CACHE PATH "Directory for phoenix_syscalls installation")
+endif()
 
 # Search for the include directory containing phoenix_syscalls.h
 find_path(PHOENIX_SYSCALLS_INCLUDE_DIRS
